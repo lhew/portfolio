@@ -3,22 +3,25 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var livereload = require("livereload");
-var connectLiveReload = require("connect-livereload");
+
+if (process.env.NODE_ENV !== "production") {
+  var livereload = require("livereload");
+  var connectLiveReload = require("connect-livereload");
+
+  const liveReloadServer = livereload.createServer();
+  liveReloadServer.server.once("connection", () => {
+    setTimeout(() => {
+      liveReloadServer.refresh("/");
+    }, 100);
+  });
+}
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 
-const liveReloadServer = livereload.createServer();
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
-
 var app = express();
 
-app.use(connectLiveReload());
+if (process.env.NODE_ENV !== "production") app.use(connectLiveReload());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -38,7 +41,7 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
-console.log('running on port 3000')
+console.log("running on port 3000");
 
 // error handler
 app.use(function (err, req, res, next) {

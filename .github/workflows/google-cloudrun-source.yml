@@ -16,11 +16,15 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: 'actions/checkout@v4' 
+    
+      - name: Setup Node.js and npm
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
 
-      # Configure Workload Identity Federation and generate an access token.
-      #
-      # See https://github.com/google-github-actions/auth for more options,
-      # including authenticating via a JSON credentials file.
+      - name: Install dependencies
+        run: NODE_ENV=production npm install
+
       - name: Google Cloud Auth
         uses: 'google-github-actions/auth@v2'
         with:

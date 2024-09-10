@@ -3,4 +3,7 @@
 runtime: nodejs20
 service: node-portfolio
 
+env_variables:
+  NODE_ENV: production
+
 # [END app_yaml]
