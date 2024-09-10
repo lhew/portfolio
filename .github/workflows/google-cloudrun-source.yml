@@ -18,12 +18,12 @@ jobs:
         uses: 'actions/checkout@v4' 
     
       - name: Setup Node.js and npm
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
-        run: NODE_ENV=production npm install
+        run: npm install
 
       - name: Google Cloud Auth
         uses: 'google-github-actions/auth@v2'
