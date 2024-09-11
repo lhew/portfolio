@@ -1,12 +1,23 @@
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const { engine } = require('express-handlebars');
+
+
+
+
+
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
+
+const app = express();
 
 if (process.env.NODE_ENV !== "production") {
-  var livereload = require("livereload");
-  var connectLiveReload = require("connect-livereload");
+  const livereload = require("livereload");
+  const connectLiveReload = require("connect-livereload");
 
   const liveReloadServer = livereload.createServer();
   liveReloadServer.server.once("connection", () => {
@@ -14,18 +25,17 @@ if (process.env.NODE_ENV !== "production") {
       liveReloadServer.refresh("/");
     }, 100);
   });
+
+  app.use(connectLiveReload());
 }
 
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
 
-var app = express();
 
-if (process.env.NODE_ENV !== "production") app.use(connectLiveReload());
 
-// view engine setup
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "hbs");
+app.engine('.hbs', engine({extname: '.hbs'}));
+app.set('view engine', '.hbs');
+app.set('views', path.join(__dirname, "views"));
+app.set("partialsDir", path.join(__dirname, "views/partials"));
 
 app.use(logger("dev"));
 app.use(express.json());
